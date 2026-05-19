@@ -21,16 +21,18 @@ func main() {
 	mux := http.NewServeMux() // создание локального мультиплексора
 	//подключение файлового сервера к роутеру на корневой путь
 	fileServer := http.FileServer(http.Dir("./static"))
-	mux.Handle("/,", fileServer)
-	//используется префиксный путь
-	// mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request){
-	// 	fmt.Fprintf(w, "Добро пожаловать в API. Вы запросили: %s", r.URL.Path)
-	// })
+	mux.Handle("/", fileServer)
 
-	// //строгий путь для точного совпадения
-	// mux.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request){
-	// 	w.Write([]byte("Страница о проекта"))
-	// })
+
+	//используется префиксный путь
+	mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request){
+		fmt.Fprintf(w, "Добро пожаловать в API. Вы запросили: %s", r.URL.Path)
+	})
+
+	//строгий путь для точного совпадения
+	mux.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request){
+		w.Write([]byte("Страница о проекта"))
+	})
 
 	//универсальный обработчик(корень)
 	//является префиксом для всего
